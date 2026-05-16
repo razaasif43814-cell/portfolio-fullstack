@@ -194,11 +194,19 @@
 ══════════════════════════════════════════════════════ */
 function initMain() {
   initNavbar();
-  initStarCanvas();
+  initVantaHero();
   initTypewriter();
   initTilt();
-  initReveal();
+  
+  // Initialize AOS (Animate On Scroll)
+  if (typeof AOS !== 'undefined') {
+    AOS.init({ duration: 800, once: true, offset: 100 });
+  } else {
+    initReveal(); // fallback
+  }
+  
   initTheme();
+  initModeToggle();
   initContactForm();
 }
 
@@ -219,26 +227,31 @@ function initNavbar() {
   });
 }
 
-/* ── STAR CANVAS (hero) ─────────────────────────────── */
-function initStarCanvas() {
-  var canvas = document.getElementById('star-canvas');
-  if (!canvas) return;
-  var ctx = canvas.getContext('2d'), stars = [];
-  function resize() {
-    canvas.width = canvas.offsetWidth; canvas.height = canvas.offsetHeight; stars = [];
-    for (var i = 0; i < Math.floor(canvas.width * canvas.height / 2800); i++) {
-      stars.push({ x: Math.random()*canvas.width, y: Math.random()*canvas.height,
-        r: Math.random()*1.5+0.3, a: Math.random(), s: Math.random()*0.004+0.001 });
-    }
-  }
-  function draw() {
-    ctx.clearRect(0,0,canvas.width,canvas.height);
-    stars.forEach(function(s){ s.a+=s.s; if(s.a>1||s.a<0) s.s*=-1;
-      ctx.beginPath(); ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
-      ctx.fillStyle='rgba(255,255,255,'+s.a.toFixed(2)+')'; ctx.fill(); });
-    requestAnimationFrame(draw);
-  }
-  window.addEventListener('resize', resize); resize(); draw();
+/* ── VANTA.JS 3D HERO ───────────────────────────────── */
+function initVantaHero() {
+  var hero = document.getElementById('hero');
+  if (!hero || typeof VANTA === 'undefined') return;
+  
+  // Remove old star canvas if it exists
+  var oldCanvas = document.getElementById('star-canvas');
+  if (oldCanvas) oldCanvas.remove();
+
+  var isLight = document.documentElement.getAttribute('data-mode') === 'light';
+  var vantaEffect = VANTA.HALO({
+    el: "#hero",
+    mouseControls: true,
+    touchControls: true,
+    gyroControls: false,
+    minHeight: 200.00,
+    minWidth: 200.00,
+    baseColor: 0x854ce6,
+    backgroundColor: isLight ? 0xffffff : 0x090917,
+    amplitudeFactor: 1.5,
+    size: 1.2
+  });
+
+  // Store globally to update background color on mode change
+  window.vantaEffect = vantaEffect;
 }
 
 /* ── TYPEWRITER ─────────────────────────────────────── */
@@ -311,21 +324,95 @@ function initTheme() {
   }
 }
 
-/* ── CONTACT FORM ───────────────────────────────────── */
+/* ── LIGHT/DARK MODE TOGGLE ─────────────────────────── */
+function initModeToggle() {
+  var html = document.documentElement;
+  var toggleBtn = document.getElementById('mode-toggle');
+  var icon = document.getElementById('mode-icon');
+  
+  var savedMode = localStorage.getItem('mode') || 'dark';
+  applyMode(savedMode);
+
+  if (toggleBtn) {
+    toggleBtn.addEventListener('click', function() {
+      var current = html.getAttribute('data-mode');
+      var newMode = current === 'dark' ? 'light' : 'dark';
+      applyMode(newMode);
+      localStorage.setItem('mode', newMode);
+    });
+  }
+
+  function applyMode(mode) {
+    html.setAttribute('data-mode', mode);
+    if (icon) {
+      icon.className = mode === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+    }
+    // Update Vanta background if running
+    if (window.vantaEffect) {
+      window.vantaEffect.setOptions({
+        backgroundColor: mode === 'dark' ? 0x090917 : 0xfdfdfd
+      });
+    }
+  }
+}
+
+/* ── CONTACT FORM WITH TOASTIFY ─────────────────────── */
 function initContactForm() {
-  var form=document.getElementById('contact-form'), feedback=document.getElementById('form-feedback'), sendBtn=document.getElementById('send-btn');
+  var form=document.getElementById('contact-form'), sendBtn=document.getElementById('send-btn');
   if (!form) return;
   form.addEventListener('submit', async function(e) {
     e.preventDefault();
     var payload={from_email:form.from_email.value.trim(),from_name:form.from_name.value.trim(),subject:form.subject.value.trim(),message:form.message.value.trim()};
-    if (!payload.from_email||!payload.from_name||!payload.message){feedback.textContent='Please fill all fields.';feedback.className='form-feedback error';return;}
-    sendBtn.disabled=true; sendBtn.textContent='Sending…';
+    
+    if (!payload.from_email||!payload.from_name||!payload.message){
+      showToast('Please fill all fields.', 'error');
+      return;
+    }
+    
+    sendBtn.disabled=true; 
+    sendBtn.innerHTML='<i class="fas fa-spinner btn-spinner"></i> Sending…';
+    
     try {
       var res=await fetch('/contact',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
       var data=await res.json();
-      if(data.status==='ok'){feedback.textContent='✅ Message sent!';feedback.className='form-feedback success';form.reset();}
-      else throw new Error(data.message);
-    } catch(err){feedback.textContent='❌ '+err.message;feedback.className='form-feedback error';}
-    finally{sendBtn.disabled=false;sendBtn.textContent='Send';}
+      if(data.status==='ok') {
+        showToast('✅ Message sent successfully!', 'success');
+        form.reset();
+      } else {
+        throw new Error(data.message);
+      }
+    } catch(err) {
+      showToast('❌ ' + err.message, 'error');
+    } finally {
+      sendBtn.disabled=false;
+      sendBtn.innerHTML='Send';
+    }
   });
 }
+
+function showToast(msg, type) {
+  if (typeof Toastify !== 'undefined') {
+    Toastify({
+      text: msg,
+      duration: 3000,
+      close: true,
+      gravity: "bottom",
+      position: "center",
+      style: {
+        background: type === 'success' ? "#4caf50" : "#f44336",
+        borderRadius: "8px",
+        fontFamily: "Inter, sans-serif"
+      }
+    }).showToast();
+  } else {
+    alert(msg);
+  }
+}
+
+/* ── RESUME DOWNLOAD TRACKING ───────────────────────── */
+window.trackResumeDownload = async function() {
+  try {
+    await fetch('/api/track/resume', { method: 'POST' });
+    showToast('⬇️ Resume Downloaded!', 'success');
+  } catch(e) { console.error(e); }
+};

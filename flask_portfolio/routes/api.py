@@ -11,6 +11,7 @@ from utils.jwt_helper import token_required, admin_required
 from middleware.validators import validate_json, sanitize_input
 from bson import ObjectId
 from datetime import datetime
+from models import skills_collection, stats_collection
 
 api_bp = Blueprint('api', __name__)
 
@@ -312,6 +313,17 @@ def delete_blog(blog_id):
 #  STATS — Dashboard statistics
 # ══════════════════════════════════════════════════════════
 
+@api_bp.route('/api/track/resume', methods=['POST'])
+def track_resume_download():
+    """POST /api/track/resume — Increment resume download count."""
+    stats_collection.update_one(
+        {'_id': 'resume_downloads'},
+        {'$inc': {'count': 1}},
+        upsert=True
+    )
+    return jsonify({'status': 'ok'})
+
+
 @api_bp.route('/api/stats', methods=['GET'])
 @admin_required
 def get_stats():
@@ -327,5 +339,6 @@ def get_stats():
             'unread_messages': Message.count(unread_only=True),
             'blogs': Blog.count(),
             'published_blogs': Blog.count(status='published'),
+            'resume_downloads': (stats_collection.find_one({'_id': 'resume_downloads'}) or {}).get('count', 0),
         }
     })

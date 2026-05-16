@@ -49,6 +49,7 @@ if MONGO_AVAILABLE and db is not None:
     blogs_collection = db['blogs']
     chat_collection = db['chat_messages']
     notifications_collection = db['notifications']
+    stats_collection = db['stats']
 
     # Create indexes (safe — won't crash if already exist)
     try:
@@ -67,3 +68,4 @@ else:
     blogs_collection = _fallback
     chat_collection = _fallback
     notifications_collection = _fallback
+    stats_collection = _fallback

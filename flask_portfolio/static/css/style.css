@@ -3,34 +3,28 @@
 ═══════════════════════════════════════════════════════ */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-/* ── 1. Purple (default) ── */
-:root, [data-theme="purple"] {
-  --bg:#090917; --bg-light:#1c1e27; --primary:#854ce6;
-  --primary-glow:rgba(133,76,230,.35); --text-1:#f2f3f4; --text-2:#b1b2b3;
-  --card:#171721; --card-glass:rgba(17,25,40,.83); --border-glass:rgba(255,255,255,.13);
-  --nav-bg:rgba(9,9,23,.92); --radius:16px; --transition:.3s ease;
+/* ── LIGHT/DARK MODE (Backgrounds, Texts, Cards) ── */
+:root, [data-mode="dark"] {
+  --bg: #090917; --bg-light: #1c1e27;
+  --text-1: #f2f3f4; --text-2: #b1b2b3;
+  --card: #171721; --card-glass: rgba(17,25,40,.83);
+  --border-glass: rgba(255,255,255,.13);
+  --nav-bg: rgba(9,9,23,.92); --radius: 16px; --transition: .3s ease;
 }
-/* ── 2. Orange ── */
-[data-theme="orange"] {
-  --bg:#fdf6ee; --bg-light:#fff; --primary:#e8630a;
-  --primary-glow:rgba(232,99,10,.28); --text-1:#1a1006; --text-2:#6b4c2a;
-  --card:#fff8f2; --card-glass:rgba(255,248,242,.93); --border-glass:rgba(232,99,10,.2);
-  --nav-bg:rgba(253,246,238,.95); --radius:16px; --transition:.3s ease;
+
+[data-mode="light"] {
+  --bg: #f5f6f8; --bg-light: #ffffff;
+  --text-1: #1a1a1a; --text-2: #5c5c5c;
+  --card: #ffffff; --card-glass: rgba(255,255,255,.85);
+  --border-glass: rgba(0,0,0,.08);
+  --nav-bg: rgba(245,246,248,.92);
 }
-/* ── 3. Rose ── */
-[data-theme="rose"] {
-  --bg:#150010; --bg-light:#24001e; --primary:#ff0080;
-  --primary-glow:rgba(255,0,128,.32); --text-1:#ffe8f4; --text-2:#cc77aa;
-  --card:#1e0018; --card-glass:rgba(30,0,24,.87); --border-glass:rgba(255,0,128,.22);
-  --nav-bg:rgba(21,0,16,.95); --radius:16px; --transition:.3s ease;
-}
-/* ── 4. Red ── */
-[data-theme="red"] {
-  --bg:#120005; --bg-light:#1e0009; --primary:#dc143c;
-  --primary-glow:rgba(220,20,60,.32); --text-1:#ffe8ec; --text-2:#bb6677;
-  --card:#1a0008; --card-glass:rgba(26,0,8,.87); --border-glass:rgba(220,20,60,.22);
-  --nav-bg:rgba(18,0,5,.95); --radius:16px; --transition:.3s ease;
-}
+
+/* ── ACCENT THEMES (Primary Colors only) ── */
+[data-theme="purple"] { --primary: #854ce6; --primary-glow: rgba(133,76,230,.35); }
+[data-theme="orange"] { --primary: #e8630a; --primary-glow: rgba(232,99,10,.35); }
+[data-theme="rose"]   { --primary: #ff0080; --primary-glow: rgba(255,0,128,.35); }
+[data-theme="red"]    { --primary: #dc143c; --primary-glow: rgba(220,20,60,.35); }
 
 /* ── Lang Switcher (replaced by lang-picker below) ── */
 .lang-picker {
@@ -625,6 +619,10 @@ body {
 .form-feedback         { font-size: 14px; min-height: 20px; text-align: center; }
 .form-feedback.success { color: #4caf50; }
 .form-feedback.error   { color: #f44336; }
+
+/* ── SPINNER ── */
+.btn-spinner { display: inline-block; animation: spin 1s linear infinite; margin-right: 6px; }
+@keyframes spin { 100% { transform: rotate(360deg); } }
 
 /* ═══════════════════════════════════════════════════════
    FOOTER

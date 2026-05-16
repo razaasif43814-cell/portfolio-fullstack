@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="purple">
+<html lang="en" data-theme="purple" data-mode="dark">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -8,6 +8,21 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <!-- Google Analytics (Replace G-XXXXXXXXXX with your actual Measurement ID) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-XXXXXXXXXX');
+  </script>
+
+  <!-- AOS CSS -->
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  
+  <!-- Toastify CSS -->
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
 </head>
 <body>
@@ -36,6 +51,11 @@
       <li><a href="#contact"    class="nav-link">Contact</a></li>
     </ul>
 
+    <!-- 🌙 Light/Dark Mode Toggle -->
+    <button class="btn btn-outline nav-github" id="mode-toggle" title="Toggle Light/Dark Mode" style="margin-left:6px">
+      <i class="fas fa-moon" id="mode-icon"></i>
+    </button>
+    
     <!-- 🎨 Theme Picker -->
     <div class="theme-picker" id="theme-picker">
       <button class="theme-trigger" id="theme-trigger" title="Change Theme" aria-label="Change Theme">🎨</button>
@@ -91,17 +111,17 @@
   <canvas id="star-canvas"></canvas>
   <div class="hero-bg-anim" aria-hidden="true"></div>
   <div class="hero-inner">
-    <div class="hero-left reveal">
+    <div class="hero-left" data-aos="fade-right">
       <h1 class="hero-title"><span>Hi, I am</span><br /><span class="gradient-text">{{ bio.name }}</span></h1>
       <div class="hero-typewriter"><span>I am a </span><span id="typewriter" class="primary-color"></span></div>
       <p class="hero-desc">{{ bio.description }}</p>
-      <a href="{{ bio.resume }}" target="_blank" class="btn btn-primary resume-btn">Check Resume</a>
+      <a href="{{ bio.resume }}" target="_blank" onclick="trackResumeDownload()" class="btn btn-primary resume-btn">Check Resume</a>
       <div class="hero-contact-info">
         <span><i class="fas fa-phone"></i> {{ bio.phone }}</span>
         <span><i class="fas fa-envelope"></i> {{ bio.email }}</span>
       </div>
     </div>
-    <div class="hero-right reveal">
+    <div class="hero-right" data-aos="fade-left">
       <div class="hero-img-wrapper tilt-card">
         <img src="{{ url_for('static', filename='images/HeroImage.jpg') }}" alt="{{ bio.name }}" class="hero-img" />
       </div>
@@ -112,11 +132,11 @@
 <!-- SKILLS -->
 <section id="skills" class="section wrapper-gradient">
   <div class="container">
-    <h2 class="section-title reveal">Skills</h2>
-    <p class="section-desc reveal">Technical skills I have built over time.</p>
+    <h2 class="section-title" data-aos="fade-up">Skills</h2>
+    <p class="section-desc" data-aos="fade-up" data-aos-delay="100">Technical skills I have built over time.</p>
     <div class="skills-grid">
       {% for group in skills %}
-      <div class="skill-card glass-card tilt-card reveal">
+      <div class="skill-card glass-card tilt-card" data-aos="fade-up" data-aos-delay="{{ loop.index0 * 100 }}">
         <h3 class="skill-group-title">{{ group.title }}</h3>
         <div class="skill-list">
           {% for item in group.skills %}
@@ -135,11 +155,11 @@
 <!-- ACHIEVEMENTS -->
 <section id="experience" class="section">
   <div class="container">
-    <h2 class="section-title reveal">Achievements</h2>
-    <p class="section-desc reveal">My hackathon wins and accomplishments.</p>
+    <h2 class="section-title" data-aos="fade-up">Achievements</h2>
+    <p class="section-desc" data-aos="fade-up" data-aos-delay="100">My hackathon wins and accomplishments.</p>
     <div class="timeline">
       {% for exp in experiences %}
-      <div class="timeline-item reveal {{ 'left' if loop.index is odd else 'right' }}">
+      <div class="timeline-item {{ 'left' if loop.index is odd else 'right' }}" data-aos="{{ 'fade-right' if loop.index is odd else 'fade-left' }}">
         <div class="timeline-dot"><img src="{{ exp.img }}" alt="{{ exp.company }}" /></div>
         <div class="timeline-content glass-card">
           <div class="tc-top">
@@ -167,11 +187,11 @@
 <!-- PROJECTS -->
 <section id="projects" class="section">
   <div class="container">
-    <h2 class="section-title reveal">Projects</h2>
-    <p class="section-desc reveal">Projects that showcase my skills.</p>
+    <h2 class="section-title" data-aos="fade-up">Projects</h2>
+    <p class="section-desc" data-aos="fade-up" data-aos-delay="100">Projects that showcase my skills.</p>
     <div class="projects-grid" id="projects-grid">
       {% for project in projects %}
-      <div class="project-card glass-card reveal" data-category="{{ project.category }}">
+      <div class="project-card glass-card" data-category="{{ project.category }}" data-aos="fade-up" data-aos-delay="{{ loop.index0 * 100 }}">
         <img src="{{ project.image }}" alt="{{ project.title }}" class="project-img" />
         <div class="project-tags">{% for tag in project.tags %}<span class="tag">{{ tag }}</span>{% endfor %}</div>
         <div class="project-details">
@@ -193,11 +213,11 @@
 <!-- EDUCATION -->
 <section id="education" class="section wrapper-gradient">
   <div class="container">
-    <h2 class="section-title reveal">Education</h2>
-    <p class="section-desc reveal">My academic journey from school to college.</p>
+    <h2 class="section-title" data-aos="fade-up">Education</h2>
+    <p class="section-desc" data-aos="fade-up" data-aos-delay="100">My academic journey from school to college.</p>
     <div class="timeline">
       {% for edu in education %}
-      <div class="timeline-item reveal {{ 'left' if loop.index is odd else 'right' }}">
+      <div class="timeline-item {{ 'left' if loop.index is odd else 'right' }}" data-aos="{{ 'fade-right' if loop.index is odd else 'fade-left' }}">
         <div class="timeline-dot"><img src="{{ edu.img }}" alt="{{ edu.school }}" /></div>
         <div class="timeline-content glass-card">
           <div class="tc-top">
@@ -214,7 +234,7 @@
       </div>
       {% endfor %}
     </div>
-    <div class="earth-wrapper reveal">
+    <div class="earth-wrapper" data-aos="fade-up">
       <div class="earth-globe"><div class="earth-layer layer1"></div><div class="earth-layer layer2"></div><div class="earth-shadow"></div></div>
       <p class="earth-label">🌍 Open to Opportunities Worldwide</p>
     </div>
@@ -224,9 +244,9 @@
 <!-- CONTACT -->
 <section id="contact" class="section">
   <div class="container">
-    <h2 class="section-title reveal">Contact</h2>
-    <p class="section-desc reveal">Feel free to reach out for any opportunities!</p>
-    <form class="contact-form glass-card reveal" id="contact-form" novalidate>
+    <h2 class="section-title" data-aos="fade-up">Contact</h2>
+    <p class="section-desc" data-aos="fade-up" data-aos-delay="100">Feel free to reach out for any opportunities!</p>
+    <form class="contact-form glass-card" id="contact-form" novalidate data-aos="fade-up" data-aos-delay="200">
       <h3 class="contact-form-title">Email Me 🚀</h3>
       <input  type="email" id="from_email" name="from_email" placeholder="Your Email"   class="form-input"    required />
       <input  type="text"  id="from_name"  name="from_name"  placeholder="Your Name"    class="form-input"    required />
@@ -286,6 +306,10 @@ async function doLogout() {
   window.location.href = '/login';
 }
 </script>
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.halo.min.js"></script>
 <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 </body>
 </html>

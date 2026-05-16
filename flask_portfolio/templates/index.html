@@ -108,8 +108,7 @@
 
 <!-- HERO -->
 <section id="hero" class="hero-section">
-  <canvas id="star-canvas"></canvas>
-  <div class="hero-bg-anim" aria-hidden="true"></div>
+  <canvas id="custom-hero-canvas" style="position:absolute;inset:0;z-index:0;width:100%;height:100%;pointer-events:none;"></canvas>
   <div class="hero-inner">
     <div class="hero-left" data-aos="fade-right">
       <h1 class="hero-title"><span>Hi, I am</span><br /><span class="gradient-text">{{ bio.name }}</span></h1>
@@ -234,9 +233,8 @@
       </div>
       {% endfor %}
     </div>
-    <div class="earth-wrapper" data-aos="fade-up">
-      <div class="earth-globe"><div class="earth-layer layer1"></div><div class="earth-layer layer2"></div><div class="earth-shadow"></div></div>
-      <p class="earth-label">🌍 Open to Opportunities Worldwide</p>
+    <div class="earth-wrapper" id="custom-earth-wrapper" data-aos="fade-up">
+      <!-- Custom 3D Earth will render here -->
     </div>
   </div>
 </section>
@@ -308,8 +306,8 @@ async function doLogout() {
 </script>
 <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.halo.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.min.js"></script>
+<script src="{{ url_for('static', filename='js/custom_3d.js') }}"></script>
 <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 </body>
 </html>

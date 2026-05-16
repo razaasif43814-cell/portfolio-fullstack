@@ -194,7 +194,7 @@
 ══════════════════════════════════════════════════════ */
 function initMain() {
   initNavbar();
-  initVantaHero();
+  // initCustomHero3D and initCustomEarth3D are called from custom_3d.js
   initTypewriter();
   initTilt();
   
@@ -227,32 +227,7 @@ function initNavbar() {
   });
 }
 
-/* ── VANTA.JS 3D HERO ───────────────────────────────── */
-function initVantaHero() {
-  var hero = document.getElementById('hero');
-  if (!hero || typeof VANTA === 'undefined') return;
-  
-  // Remove old star canvas if it exists
-  var oldCanvas = document.getElementById('star-canvas');
-  if (oldCanvas) oldCanvas.remove();
-
-  var isLight = document.documentElement.getAttribute('data-mode') === 'light';
-  var vantaEffect = VANTA.HALO({
-    el: "#hero",
-    mouseControls: true,
-    touchControls: true,
-    gyroControls: false,
-    minHeight: 200.00,
-    minWidth: 200.00,
-    baseColor: 0x854ce6,
-    backgroundColor: isLight ? 0xffffff : 0x090917,
-    amplitudeFactor: 1.5,
-    size: 1.2
-  });
-
-  // Store globally to update background color on mode change
-  window.vantaEffect = vantaEffect;
-}
+/* ── CUSTOM 3D HERO MOVED TO custom_3d.js ───────────────────────────────── */
 
 /* ── TYPEWRITER ─────────────────────────────────────── */
 function initTypewriter() {
@@ -347,12 +322,7 @@ function initModeToggle() {
     if (icon) {
       icon.className = mode === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
     }
-    // Update Vanta background if running
-    if (window.vantaEffect) {
-      window.vantaEffect.setOptions({
-        backgroundColor: mode === 'dark' ? 0x090917 : 0xfdfdfd
-      });
-    }
+    // Background color update for custom 3D is handled in custom_3d.js render loop
   }
 }
 

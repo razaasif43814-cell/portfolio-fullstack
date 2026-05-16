@@ -799,3 +799,33 @@ body {
   .project-img      { height: 140px; }
   .contact-form     { padding: 16px 12px; }
 }
+
+/* ═══════════════════════════════════════════════════════
+   PREMIUM 3D CANVAS ENHANCEMENTS
+═══════════════════════════════════════════════════════ */
+
+/* Hero canvas: sit behind hero content, no clipping */
+#custom-hero-canvas {
+  position: absolute; inset: 0; z-index: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  /* NO mask-image — it clips particles on many browsers */
+}
+
+/* Earth canvas host */
+/* Earth host – glow is on the DIV wrapper, NOT the canvas itself */
+#earth-canvas-host {
+  border-radius: 50%;
+  overflow: hidden; /* clips WebGL canvas to circle */
+  cursor: grab;
+  transition: box-shadow .3s ease;
+  /* box-shadow from JS inline style (theme-aware) */
+}
+#earth-canvas-host:active { cursor: grabbing; }
+
+/* Earth wrapper – simple float, no layout-shift animation */
+.earth-wrapper {
+  display: flex; flex-direction: column;
+  align-items: center; margin-top: 60px; gap: 20px;
+}
+

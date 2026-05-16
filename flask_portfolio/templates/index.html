@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="purple">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Asif Raza – Portfolio</title>
+  <meta name="description" content="Portfolio of Asif Raza – BCA Student, Web Developer, UI/UX Designer." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+</head>
+<body>
+
+<!-- ══════════════════ SPLASH SCREEN ══════════════════ -->
+<div id="splash">
+  <canvas id="splash-stars"></canvas>
+  <div id="splash-text"></div>
+  <div id="splash-bar"><div id="splash-progress"></div></div>
+</div>
+
+<!-- ══════════════════ MAIN CONTENT ══════════════════ -->
+<div id="main-content" style="display:none">
+
+<!-- NAVBAR -->
+<nav id="navbar">
+  <div class="nav-container">
+    <a href="#hero" class="nav-logo">Asif Raza</a>
+    <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="#about"      class="nav-link" data-key="nav-about">About</a></li>
+      <li><a href="#skills"     class="nav-link" data-key="nav-skills">Skills</a></li>
+      <li><a href="#experience" class="nav-link" data-key="nav-achieve">Achievements</a></li>
+      <li><a href="#projects"   class="nav-link" data-key="nav-projects">Projects</a></li>
+      <li><a href="#education"  class="nav-link" data-key="nav-edu">Education</a></li>
+      <li><a href="#contact"    class="nav-link" data-key="nav-contact">Contact</a></li>
+    </ul>
+
+    <!-- 🎨 Theme Picker -->
+    <div class="theme-picker" id="theme-picker">
+      <button class="theme-trigger" id="theme-trigger" title="Change Theme" aria-label="Change Theme">🎨</button>
+      <div class="theme-dropdown" id="theme-dropdown" role="menu">
+        <p class="theme-label">Choose Theme</p>
+        <div class="theme-grid">
+          <button class="theme-dot active" data-theme="purple" title="Purple"></button>
+          <button class="theme-dot"        data-theme="orange" title="Orange"></button>
+          <button class="theme-dot"        data-theme="rose"   title="Rose"></button>
+          <button class="theme-dot"        data-theme="red"    title="Red"></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 🌐 Language Picker -->
+    <div class="lang-picker" id="lang-picker">
+      <button class="lang-trigger" id="lang-trigger" title="Change Language" aria-label="Change Language">🌐</button>
+      <div class="lang-dropdown" id="lang-dropdown" role="menu">
+        <p class="theme-label">Language / भाषा</p>
+        <div class="lang-grid">
+          <button class="lang-opt active" data-lang="en" onclick="switchLang('en')">EN<small>English</small></button>
+          <button class="lang-opt"        data-lang="hi" onclick="switchLang('hi')">HI<small>हिंदी</small></button>
+          <button class="lang-opt"        data-lang="mr" onclick="switchLang('mr')">MR<small>मराठी</small></button>
+          <button class="lang-opt"        data-lang="bn" onclick="switchLang('bn')">BN<small>বাংলা</small></button>
+          <button class="lang-opt"        data-lang="te" onclick="switchLang('te')">TE<small>తెలుగు</small></button>
+          <button class="lang-opt"        data-lang="ta" onclick="switchLang('ta')">TA<small>தமிழ்</small></button>
+          <button class="lang-opt"        data-lang="gu" onclick="switchLang('gu')">GU<small>ગુજ.</small></button>
+          <button class="lang-opt"        data-lang="pa" onclick="switchLang('pa')">PA<small>ਪੰਜਾਬੀ</small></button>
+        </div>
+      </div>
+    </div>
+
+    <a href="{{ bio.github }}" target="_blank" class="btn btn-outline nav-github">
+      <i class="fab fa-github"></i> Github
+    </a>
+  </div>
+  <div class="mobile-menu" id="mobile-menu">
+    <a href="#about"      class="mobile-link" data-key="nav-about">About</a>
+    <a href="#skills"     class="mobile-link" data-key="nav-skills">Skills</a>
+    <a href="#experience" class="mobile-link" data-key="nav-achieve">Achievements</a>
+    <a href="#projects"   class="mobile-link" data-key="nav-projects">Projects</a>
+    <a href="#education"  class="mobile-link" data-key="nav-edu">Education</a>
+    <a href="#contact"    class="mobile-link" data-key="nav-contact">Contact</a>
+    <a href="{{ bio.github }}" target="_blank" class="btn btn-primary mt-1">Github Profile</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero" class="hero-section">
+  <canvas id="star-canvas"></canvas>
+  <div class="hero-bg-anim" aria-hidden="true"></div>
+  <div class="hero-inner">
+    <div class="hero-left reveal">
+      <h1 class="hero-title"><span data-key="hero-hi">Hi, I am</span><br /><span class="gradient-text">{{ bio.name }}</span></h1>
+      <div class="hero-typewriter"><span data-key="hero-iam">I am a </span><span id="typewriter" class="primary-color"></span></div>
+      <p class="hero-desc" data-key="hero-desc">{{ bio.description }}</p>
+      <a href="{{ bio.resume }}" target="_blank" class="btn btn-primary resume-btn" data-key="hero-resume">Check Resume</a>
+      <div class="hero-contact-info">
+        <span><i class="fas fa-phone"></i> {{ bio.phone }}</span>
+        <span><i class="fas fa-envelope"></i> {{ bio.email }}</span>
+      </div>
+    </div>
+    <div class="hero-right reveal">
+      <div class="hero-img-wrapper tilt-card">
+        <img src="{{ url_for('static', filename='images/HeroImage.jpg') }}" alt="{{ bio.name }}" class="hero-img" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills" class="section wrapper-gradient">
+  <div class="container">
+    <h2 class="section-title reveal" data-key="sec-skills">Skills</h2>
+    <p class="section-desc reveal" data-key="sec-skills-desc">Here are my technical skills that I have been building over time.</p>
+    <div class="skills-grid">
+      {% for group in skills %}
+      <div class="skill-card glass-card tilt-card reveal">
+        <h3 class="skill-group-title">{{ group.title }}</h3>
+        <div class="skill-list">
+          {% for item in group.skills %}
+          <div class="skill-item">
+            <img src="{{ item.image }}" alt="{{ item.name }}" class="skill-icon" onerror="this.src='https://cdn-icons-png.flaticon.com/512/1006/1006771.png'" />
+            <span>{{ item.name }}</span>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- ACHIEVEMENTS -->
+<section id="experience" class="section">
+  <div class="container">
+    <h2 class="section-title reveal" data-key="sec-achieve">Achievements</h2>
+    <p class="section-desc reveal" data-key="sec-achieve-desc">My hackathon wins and accomplishments so far.</p>
+    <div class="timeline">
+      {% for exp in experiences %}
+      <div class="timeline-item reveal {{ 'left' if loop.index is odd else 'right' }}">
+        <div class="timeline-dot"><img src="{{ exp.img }}" alt="{{ exp.company }}" /></div>
+        <div class="timeline-content glass-card">
+          <div class="tc-top">
+            <img src="{{ exp.img }}" alt="{{ exp.company }}" class="tc-img" />
+            <div>
+              <div class="tc-role">{{ exp.role }}</div>
+              <div class="tc-company">{{ exp.company }}</div>
+              <div class="tc-date">{{ exp.date }}</div>
+            </div>
+          </div>
+          <p class="tc-desc">{{ exp.desc }}</p>
+          {% if exp.skills %}
+          <div class="tc-skills">
+            <strong data-key="label-skills">Skills:</strong>
+            <div class="tc-skill-tags">{% for s in exp.skills %}<span class="tag">{{ s }}</span>{% endfor %}</div>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects" class="section">
+  <div class="container">
+    <h2 class="section-title reveal" data-key="sec-projects">Projects</h2>
+    <p class="section-desc reveal" data-key="sec-projects-desc">Here are some of my projects that showcase my skills.</p>
+    <div class="projects-grid" id="projects-grid">
+      {% for project in projects %}
+      <div class="project-card glass-card reveal" data-category="{{ project.category }}">
+        <img src="{{ project.image }}" alt="{{ project.title }}" class="project-img" />
+        <div class="project-tags">{% for tag in project.tags %}<span class="tag">{{ tag }}</span>{% endfor %}</div>
+        <div class="project-details">
+          <h3 class="project-title">{{ project.title }}</h3>
+          <div class="project-date">{{ project.date }}</div>
+          <p class="project-desc">{{ project.description }}</p>
+        </div>
+        <div class="project-actions">
+          <a href="{{ project.github }}" target="_blank" class="btn btn-outline btn-sm"><i class="fab fa-github"></i> <span data-key="btn-code">Code</span></a>
+          {% if project.webapp %}<a href="{{ project.webapp }}" target="_blank" class="btn btn-primary btn-sm"><i class="fas fa-external-link-alt"></i> <span data-key="btn-demo">Demo</span></a>{% endif %}
+          {% if project.case_study %}<a href="/case-study/{{ project.id }}" class="btn btn-outline btn-sm"><i class="fas fa-book-open"></i> Case Study</a>{% endif %}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- EDUCATION -->
+<section id="education" class="section wrapper-gradient">
+  <div class="container">
+    <h2 class="section-title reveal" data-key="sec-edu">Education</h2>
+    <p class="section-desc reveal" data-key="sec-edu-desc">My academic journey from school to college.</p>
+    <div class="timeline">
+      {% for edu in education %}
+      <div class="timeline-item reveal {{ 'left' if loop.index is odd else 'right' }}">
+        <div class="timeline-dot"><img src="{{ edu.img }}" alt="{{ edu.school }}" /></div>
+        <div class="timeline-content glass-card">
+          <div class="tc-top">
+            <img src="{{ edu.img }}" alt="{{ edu.school }}" class="tc-img" />
+            <div>
+              <div class="tc-role">{{ edu.school }}</div>
+              <div class="tc-company">{{ edu.degree }}</div>
+              <div class="tc-date">{{ edu.date }}</div>
+            </div>
+          </div>
+          <div class="tc-grade"><strong data-key="label-grade">Grade:</strong> {{ edu.grade }}</div>
+          <p class="tc-desc">{{ edu.desc }}</p>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    <div class="earth-wrapper reveal">
+      <div class="earth-globe"><div class="earth-layer layer1"></div><div class="earth-layer layer2"></div><div class="earth-shadow"></div></div>
+      <p class="earth-label" data-key="earth-label">🌍 Open to Opportunities Worldwide</p>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="section">
+  <div class="container">
+    <h2 class="section-title reveal" data-key="sec-contact">Contact</h2>
+    <p class="section-desc reveal" data-key="sec-contact-desc">Feel free to reach out to me for any questions or opportunities!</p>
+    <form class="contact-form glass-card reveal" id="contact-form" novalidate>
+      <h3 class="contact-form-title" data-key="form-title">Email Me 🚀</h3>
+      <input  type="email" id="from_email" name="from_email" placeholder="Your Email"   class="form-input"    required data-key-ph="ph-email" />
+      <input  type="text"  id="from_name"  name="from_name"  placeholder="Your Name"    class="form-input"    required data-key-ph="ph-name"  />
+      <input  type="text"  id="subject"    name="subject"    placeholder="Subject"       class="form-input"    required data-key-ph="ph-subject"/>
+      <textarea            id="message"    name="message"    placeholder="Message"       class="form-textarea" rows="5" required data-key-ph="ph-msg"></textarea>
+      <button type="submit" class="btn btn-primary btn-block" id="send-btn" data-key="btn-send">Send</button>
+      <div id="form-feedback" class="form-feedback"></div>
+    </form>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-logo">Asif Raza</div>
+    <nav class="footer-nav">
+      <a href="#about"      data-key="nav-about">About</a>
+      <a href="#skills"     data-key="nav-skills">Skills</a>
+      <a href="#experience" data-key="nav-achieve">Achievements</a>
+      <a href="#projects"   data-key="nav-projects">Projects</a>
+      <a href="#education"  data-key="nav-edu">Education</a>
+      <a href="#contact"    data-key="nav-contact">Contact</a>
+    </nav>
+    <div class="social-icons">
+      <a href="{{ bio.linkedin }}" target="_blank" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+      <a href="{{ bio.github }}"   target="_blank" aria-label="GitHub"><i class="fab fa-github"></i></a>
+    </div>
+    <p class="footer-copy" data-key="footer-copy">© 2025 Asif Raza. All rights reserved.</p>
+  </div>
+</footer>
+
+</div><!-- end #main-content -->
+
+<script>
+const BIO_ROLES = {{ bio.roles | tojson }};
+var _T={en:{'nav-about':'About','nav-skills':'Skills','nav-achieve':'Achievements','nav-projects':'Projects','nav-edu':'Education','nav-contact':'Contact','hero-hi':'Hi, I am','hero-iam':'I am a ','hero-desc':'Motivated BCA student skilled in Web Development, UI/UX and Python.','hero-resume':'Check Resume','sec-skills':'Skills','sec-skills-desc':'Technical skills I have built over time.','sec-achieve':'Achievements','sec-achieve-desc':'My hackathon wins and accomplishments.','sec-projects':'Projects','sec-projects-desc':'Projects that showcase my skills.','sec-edu':'Education','sec-edu-desc':'My academic journey from school to college.','sec-contact':'Contact','sec-contact-desc':'Feel free to reach out for any opportunities!','form-title':'Email Me','btn-send':'Send','btn-code':'Code','btn-demo':'Demo','label-skills':'Skills:','label-grade':'Grade:','earth-label':'Open to Opportunities Worldwide','footer-copy':'2025 Asif Raza. All rights reserved.','ph-email':'Your Email','ph-name':'Your Name','ph-subject':'Subject','ph-msg':'Message'},hi:{'nav-about':'\u092a\u0930\u093f\u091a\u092f','nav-skills':'\u0915\u094c\u0936\u0932','nav-achieve':'\u0909\u092a\u0932\u092c\u094d\u0927\u093f\u092f\u093e\u0901','nav-projects':'\u092a\u0930\u093f\u092f\u094b\u091c\u0928\u093e\u090f\u0901','nav-edu':'\u0936\u093f\u0915\u094d\u0937\u093e','nav-contact':'\u0938\u0902\u092a\u0930\u094d\u0915','hero-hi':'\u0928\u092e\u0938\u094d\u0924\u0947, \u092e\u0948\u0902 \u0939\u0942\u0901','hero-iam':'\u092e\u0948\u0902 \u090f\u0915 ','hero-desc':'\u0935\u0947\u092c \u0921\u0947\u0935\u0932\u092a\u092e\u0947\u0902\u091f, UI/UX \u0914\u0930 Python \u092e\u0947\u0902 \u0915\u0941\u0936\u0932 BCA \u091b\u093e\u0924\u094d\u0930\u0964','hero-resume':'\u0930\u093f\u091c\u094d\u092f\u0942\u092e\u0947 \u0926\u0947\u0916\u0947\u0902','sec-skills':'\u0915\u094c\u0936\u0932','sec-skills-desc':'\u092e\u0947\u0930\u0947 \u0924\u0915\u0928\u0940\u0915\u0940 \u0915\u094c\u0936\u0932 \u091c\u094b \u092e\u0948\u0902\u0928\u0947 \u0938\u092e\u092f \u0915\u0947 \u0938\u093e\u0925 \u092c\u0928\u093e\u090f\u0964','sec-achieve':'\u0909\u092a\u0932\u092c\u094d\u0927\u093f\u092f\u093e\u0901','sec-achieve-desc':'\u092e\u0947\u0930\u0940 \u0939\u0948\u0915\u093e\u0925\u0949\u0928 \u091c\u0940\u0924 \u0914\u0930 \u0909\u092a\u0932\u092c\u094d\u0927\u093f\u092f\u093e\u0901\u0964','sec-projects':'\u092a\u0930\u093f\u092f\u094b\u091c\u0928\u093e\u090f\u0901','sec-projects-desc':'\u0915\u0941\u091b \u092a\u0930\u093f\u092f\u094b\u091c\u0928\u093e\u090f\u0901 \u091c\u094b \u092e\u0947\u0930\u0947 \u0915\u094c\u0936\u0932 \u0926\u0930\u094d\u0936\u093e\u0924\u0940 \u0939\u0948\u0902\u0964','sec-edu':'\u0936\u093f\u0915\u094d\u0937\u093e','sec-edu-desc':'\u0938\u094d\u0915\u0942\u0932 \u0938\u0947 \u0915\u0949\u0932\u0947\u091c \u0924\u0915 \u0915\u0940 \u092e\u0947\u0930\u0940 \u0936\u0948\u0915\u094d\u0937\u0923\u093f\u0915 \u092f\u093e\u0924\u094d\u0930\u093e\u0964','sec-contact':'\u0938\u0902\u092a\u0930\u094d\u0915 \u0915\u0930\u0947\u0902','sec-contact-desc':'\u0915\u093f\u0938\u0940 \u092d\u0940 \u092a\u094d\u0930\u0936\u094d\u0928 \u0915\u0947 \u0932\u093f\u090f \u0938\u0902\u092a\u0930\u094d\u0915 \u0915\u0930\u0947\u0902!','form-title':'\u092e\u0941\u091d\u0947 \u0908\u092e\u0947\u0932 \u0915\u0930\u0947\u0902','btn-send':'\u092d\u0947\u091c\u0947\u0902','btn-code':'\u0915\u094b\u0921','btn-demo':'\u0921\u0947\u092e\u094b','label-skills':'\u0915\u094c\u0936\u0932:','label-grade':'\u0917\u094d\u0930\u0947\u0921:','earth-label':'\u0926\u0941\u0928\u093f\u092f\u093e\u092d\u0930 \u0915\u0947 \u0905\u0935\u0938\u0930\u094b\u0902 \u0915\u0947 \u0932\u093f\u090f \u0924\u0948\u092f\u093e\u0930','footer-copy':'2025 Asif Raza. \u0938\u0930\u094d\u0935\u093e\u0927\u093f\u0915\u093e\u0930 \u0938\u0941\u0930\u0915\u094d\u0937\u093f\u0924.','ph-email':'\u0906\u092a\u0915\u093e \u0908\u092e\u0947\u0932','ph-name':'\u0906\u092a\u0915\u093e \u0928\u093e\u092e','ph-subject':'\u0935\u093f\u0937\u092f','ph-msg':'\u0938\u0902\u0926\u0947\u0936'}};
+function switchLang(lang){
+  localStorage.setItem('lang',lang);
+  var d=_T[lang]||_T.en;
+  document.querySelectorAll('[data-key]').forEach(function(el){var k=el.getAttribute('data-key');if(k&&d[k]!==undefined)el.textContent=d[k];});
+  document.querySelectorAll('[data-key-ph]').forEach(function(el){var k=el.getAttribute('data-key-ph');if(k&&d[k]!==undefined)el.setAttribute('placeholder',d[k]);});
+  document.querySelectorAll('.lang-opt').forEach(function(b){b.classList.toggle('active',b.getAttribute('data-lang')===lang);});
+  var lp=document.getElementById('lang-picker');if(lp)lp.classList.remove('open');
+}
+</script>
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

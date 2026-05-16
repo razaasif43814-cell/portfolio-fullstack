@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="purple">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Manage Projects — Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="/static/css/style.css" />
+  <link rel="stylesheet" href="/static/css/admin.css" />
+</head>
+<body>
+  <div class="admin-layout">
+    <aside class="admin-sidebar" id="admin-sidebar">
+      <div class="sidebar-header">
+        <a href="/" class="sidebar-logo"><span class="gradient-text">AR</span><span class="logo-text">Admin Panel</span></a>
+        <button class="sidebar-close" id="sidebar-close"><i class="fas fa-times"></i></button>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="/admin/dashboard" class="sidebar-link"><i class="fas fa-chart-pie"></i><span>Dashboard</span></a>
+        <a href="/admin/users" class="sidebar-link"><i class="fas fa-users"></i><span>Users</span></a>
+        <a href="/admin/projects" class="sidebar-link active"><i class="fas fa-project-diagram"></i><span>Projects</span></a>
+        <a href="/admin/messages" class="sidebar-link"><i class="fas fa-envelope"></i><span>Messages</span></a>
+        <a href="/admin/blogs" class="sidebar-link"><i class="fas fa-blog"></i><span>Blogs</span></a>
+        <div class="sidebar-divider"></div>
+        <a href="/chat" class="sidebar-link"><i class="fas fa-comments"></i><span>Live Chat</span></a>
+        <a href="/" class="sidebar-link"><i class="fas fa-globe"></i><span>View Site</span></a>
+      </nav>
+      <div class="sidebar-footer">
+        <button class="sidebar-logout" id="logout-btn"><i class="fas fa-sign-out-alt"></i></button>
+      </div>
+    </aside>
+
+    <main class="admin-main">
+      <header class="admin-topbar">
+        <button class="topbar-menu-btn" id="sidebar-toggle"><i class="fas fa-bars"></i></button>
+        <h1 class="topbar-title">Project Management</h1>
+        <button class="btn btn-primary btn-sm" id="add-project-btn"><i class="fas fa-plus"></i> Add Project</button>
+      </header>
+
+      <div class="admin-content">
+        <!-- Add/Edit Project Modal -->
+        <div class="modal-overlay" id="project-modal" style="display:none">
+          <div class="modal-card glass-card">
+            <div class="modal-header">
+              <h3 id="modal-title">Add Project</h3>
+              <button class="modal-close" id="modal-close"><i class="fas fa-times"></i></button>
+            </div>
+            <form id="project-form" class="modal-form">
+              <input type="hidden" id="project-id" />
+              <div class="form-group">
+                <label>Title</label>
+                <input type="text" id="proj-title" class="auth-input" placeholder="Project Title" required />
+              </div>
+              <div class="form-group">
+                <label>Description</label>
+                <textarea id="proj-desc" class="auth-input" rows="3" placeholder="Project Description" required></textarea>
+              </div>
+              <div class="form-row-2">
+                <div class="form-group">
+                  <label>Date</label>
+                  <input type="text" id="proj-date" class="auth-input" placeholder="2024" />
+                </div>
+                <div class="form-group">
+                  <label>Category</label>
+                  <input type="text" id="proj-category" class="auth-input" placeholder="web app" />
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Image URL</label>
+                <input type="url" id="proj-image" class="auth-input" placeholder="https://..." />
+              </div>
+              <div class="form-group">
+                <label>Tags (comma separated)</label>
+                <input type="text" id="proj-tags" class="auth-input" placeholder="HTML, CSS, JavaScript" />
+              </div>
+              <div class="form-row-2">
+                <div class="form-group">
+                  <label>GitHub URL</label>
+                  <input type="url" id="proj-github" class="auth-input" placeholder="https://github.com/..." />
+                </div>
+                <div class="form-group">
+                  <label>Demo URL</label>
+                  <input type="url" id="proj-webapp" class="auth-input" placeholder="https://..." />
+                </div>
+              </div>
+              <button type="submit" class="btn btn-primary btn-block" id="save-project-btn">
+                <i class="fas fa-save"></i> Save Project
+              </button>
+              <div id="project-feedback" class="auth-feedback"></div>
+            </form>
+          </div>
+        </div>
+
+        <!-- Projects Table -->
+        <div class="data-table glass-card">
+          <div class="table-header">
+            <h3><i class="fas fa-project-diagram"></i> All Projects</h3>
+            <span class="table-count" id="project-count"></span>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>Image</th>
+                <th>Title</th>
+                <th>Category</th>
+                <th>Tags</th>
+                <th>Date</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="projects-body">
+              <tr><td colspan="6" class="loading-cell"><i class="fas fa-spinner fa-spin"></i> Loading...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="/static/js/admin.js"></script>
+  <script>initProjectsPage();</script>
+</body>
+</html>

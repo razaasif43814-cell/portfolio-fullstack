@@ -1,0 +1,43 @@
+# ══════════════════════════════════════════════
+# Git Ignore — Portfolio Full-Stack App
+# ══════════════════════════════════════════════
+
+# Environment
+.env
+*.env.local
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+dist/
+build/
+venv/
+.venv/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Uploads (user-generated)
+flask_portfolio/static/uploads/*
+
+# Node (for showcase projects)
+node_modules/
+package-lock.json
+npm-debug.log
+
+# Logs
+*.log
+logs/

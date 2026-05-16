@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="purple">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Messages — Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="/static/css/style.css" />
+  <link rel="stylesheet" href="/static/css/admin.css" />
+</head>
+<body>
+  <div class="admin-layout">
+    <aside class="admin-sidebar" id="admin-sidebar">
+      <div class="sidebar-header"><a href="/" class="sidebar-logo"><span class="gradient-text">AR</span><span class="logo-text">Admin</span></a><button class="sidebar-close" id="sidebar-close"><i class="fas fa-times"></i></button></div>
+      <nav class="sidebar-nav">
+        <a href="/admin/dashboard" class="sidebar-link"><i class="fas fa-chart-pie"></i><span>Dashboard</span></a>
+        <a href="/admin/users" class="sidebar-link"><i class="fas fa-users"></i><span>Users</span></a>
+        <a href="/admin/projects" class="sidebar-link"><i class="fas fa-project-diagram"></i><span>Projects</span></a>
+        <a href="/admin/messages" class="sidebar-link active"><i class="fas fa-envelope"></i><span>Messages</span></a>
+        <a href="/admin/blogs" class="sidebar-link"><i class="fas fa-blog"></i><span>Blogs</span></a>
+        <div class="sidebar-divider"></div>
+        <a href="/" class="sidebar-link"><i class="fas fa-globe"></i><span>View Site</span></a>
+      </nav>
+      <div class="sidebar-footer"><button class="sidebar-logout" id="logout-btn"><i class="fas fa-sign-out-alt"></i></button></div>
+    </aside>
+    <main class="admin-main">
+      <header class="admin-topbar">
+        <button class="topbar-menu-btn" id="sidebar-toggle"><i class="fas fa-bars"></i></button>
+        <h1 class="topbar-title">Contact Messages</h1>
+      </header>
+      <div class="admin-content">
+        <div class="data-table glass-card">
+          <div class="table-header"><h3><i class="fas fa-envelope"></i> All Messages</h3><span class="table-count" id="msg-count"></span></div>
+          <table><thead><tr><th>Status</th><th>From</th><th>Email</th><th>Subject</th><th>Message</th><th>Date</th><th>Actions</th></tr></thead>
+          <tbody id="messages-body"><tr><td colspan="7" class="loading-cell"><i class="fas fa-spinner fa-spin"></i> Loading...</td></tr></tbody></table>
+        </div>
+      </div>
+    </main>
+  </div>
+  <script src="/static/js/admin.js"></script>
+  <script>initMessagesPage();</script>
+</body>
+</html>

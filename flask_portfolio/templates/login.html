@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="purple">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login — Asif Raza Portfolio</title>
+  <meta name="description" content="Login to Asif Raza Portfolio Admin Panel" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="/static/css/style.css" />
+  <link rel="stylesheet" href="/static/css/auth.css" />
+</head>
+<body>
+  <div class="auth-wrapper">
+    <div class="auth-bg-effects">
+      <div class="auth-blob blob-1"></div>
+      <div class="auth-blob blob-2"></div>
+      <div class="auth-blob blob-3"></div>
+    </div>
+
+    <div class="auth-card glass-card" id="login-card">
+      <div class="auth-header">
+        <a href="/" class="auth-logo">
+          <span class="gradient-text">Asif Raza</span>
+        </a>
+        <h1 class="auth-title">Welcome Back</h1>
+        <p class="auth-subtitle">Sign in to access your dashboard</p>
+      </div>
+
+      <form class="auth-form" id="login-form" novalidate>
+        <div class="form-group">
+          <div class="input-icon-wrapper">
+            <i class="fas fa-envelope input-icon"></i>
+            <input type="email" id="login-email" name="email" placeholder="Email Address" class="auth-input" required autocomplete="email" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="input-icon-wrapper">
+            <i class="fas fa-lock input-icon"></i>
+            <input type="password" id="login-password" name="password" placeholder="Password" class="auth-input" required autocomplete="current-password" />
+            <button type="button" class="toggle-password" id="toggle-pwd" aria-label="Show password">
+              <i class="fas fa-eye"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <label class="remember-me">
+            <input type="checkbox" id="remember" /> <span>Remember me</span>
+          </label>
+          <a href="/forgot-password" class="forgot-link">Forgot password?</a>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block auth-submit" id="login-btn">
+          <i class="fas fa-sign-in-alt"></i> Sign In
+        </button>
+
+        <div id="login-feedback" class="auth-feedback"></div>
+      </form>
+
+      <div class="auth-footer">
+        <p>Don't have an account? <a href="/signup" class="auth-link">Create one</a></p>
+      </div>
+
+      <div class="auth-divider">
+        <span>SECURE LOGIN</span>
+      </div>
+
+      <div class="auth-trust">
+        <span><i class="fas fa-shield-alt"></i> JWT Encrypted</span>
+        <span><i class="fas fa-lock"></i> bcrypt Hashing</span>
+        <span><i class="fas fa-user-shield"></i> Role-based Access</span>
+      </div>
+    </div>
+  </div>
+
+  <script src="/static/js/auth.js"></script>
+  <script>
+    initLoginForm('{{ redirect_to | default("/admin/dashboard") }}');
+  </script>
+</body>
+</html>

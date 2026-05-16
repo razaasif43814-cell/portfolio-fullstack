@@ -53,15 +53,13 @@
     <a href="{{ bio.github }}" target="_blank" class="btn btn-outline nav-github">
       <i class="fab fa-github"></i> Github
     </a>
-    <a href="/chat" class="btn btn-outline nav-github" style="margin-left:6px" title="Live Chat">
-      <i class="fas fa-comments"></i>
-    </a>
-    <a href="/admin/dashboard" class="btn btn-outline nav-github" style="margin-left:6px" title="Admin Panel">
-      <i class="fas fa-tachometer-alt"></i>
-    </a>
     <button onclick="doLogout()" class="btn btn-outline nav-github" style="margin-left:6px" title="Logout">
       <i class="fas fa-sign-out-alt"></i>
     </button>
+    <!-- Admin button: shown only if admin -->
+    <a href="/admin/dashboard" class="btn btn-outline nav-github admin-only" id="admin-nav-btn" style="margin-left:6px;display:none" title="Admin Panel">
+      <i class="fas fa-tachometer-alt"></i>
+    </a>
   </div>
   <div class="mobile-menu" id="mobile-menu">
     <a href="#about"      class="mobile-link">About</a>
@@ -71,7 +69,7 @@
     <a href="#education"  class="mobile-link">Education</a>
     <a href="#contact"    class="mobile-link">Contact</a>
     <a href="/chat" class="mobile-link">💬 Live Chat</a>
-    <a href="/admin/dashboard" class="mobile-link">👨‍💼 Admin Panel</a>
+    <a href="/admin/dashboard" class="mobile-link admin-only" id="admin-mobile-btn" style="display:none">👨‍💼 Admin Panel</a>
     <button onclick="doLogout()" class="mobile-link" style="background:none;border:none;color:inherit;cursor:pointer;text-align:left;width:100%;padding:inherit;font:inherit;">🚪 Logout</button>
     <div class="mobile-pickers">
       <div class="mobile-picker-row">
@@ -255,7 +253,7 @@
       <a href="{{ bio.linkedin }}" target="_blank" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
       <a href="{{ bio.github }}"   target="_blank" aria-label="GitHub"><i class="fab fa-github"></i></a>
     </div>
-    <p class="footer-copy">© 2025 Asif Raza. All rights reserved.</p>
+    <p class="footer-copy">© 2026 Asif Raza. All rights reserved.</p>
   </div>
 </footer>
 
@@ -264,7 +262,20 @@
 <script>
 const BIO_ROLES = {{ bio.roles | tojson }};
 
-/* Logout — clears JWT cookie + localStorage and redirects to login */
+/* Show admin button if user is admin */
+(function() {
+  try {
+    var user = JSON.parse(localStorage.getItem('user') || '{}');
+    if (user && user.role === 'admin') {
+      var btn = document.getElementById('admin-nav-btn');
+      var mBtn = document.getElementById('admin-mobile-btn');
+      if (btn)  btn.style.display = '';
+      if (mBtn) mBtn.style.display = '';
+    }
+  } catch(e) {}
+})();
+
+/* Logout */
 async function doLogout() {
   try {
     await fetch('/api/auth/logout', { method: 'POST', credentials: 'same-origin' });

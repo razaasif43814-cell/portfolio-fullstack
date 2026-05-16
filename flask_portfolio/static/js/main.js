@@ -8,6 +8,18 @@
   var textEl   = document.getElementById('splash-text');
   var progress = document.getElementById('splash-progress');
   var canvas   = document.getElementById('splash-stars');
+
+  /* ── Skip splash if already seen this session ── */
+  if (sessionStorage.getItem('splashDone')) {
+    splash.style.display = 'none';
+    var main = document.getElementById('main-content');
+    main.style.display = 'block';
+    main.style.opacity = '1';
+    initMain();
+    return;
+  }
+  sessionStorage.setItem('splashDone', '1');
+
   var ctx      = canvas.getContext('2d');
 
   canvas.width  = window.innerWidth;

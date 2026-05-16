@@ -96,7 +96,7 @@ function initLoginForm(redirectTo) {
         }
         showFeedback('login-feedback', '✅ Login successful! Redirecting...', 'success');
         setTimeout(function() {
-          window.location.href = redirectTo || '/admin/dashboard';
+          window.location.href = redirectTo || '/portfolio';
         }, 800);
       } else {
         showFeedback('login-feedback', result.data.message || 'Login failed', 'error');

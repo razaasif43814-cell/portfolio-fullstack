@@ -441,8 +441,29 @@ body {
 .mobile-link:hover { color: var(--primary); }
 
 @media (max-width: 768px) {
-  .nav-links, .nav-github { display: none; }
+  .nav-links, .nav-github, .theme-picker, .lang-picker { display: none; }
   .hamburger { display: flex; }
+}
+
+/* ── Mobile Pickers (inside hamburger menu) ── */
+.mobile-pickers {
+  display: flex; flex-direction: column; gap: 12px;
+  padding: 14px 0; border-top: 1px solid var(--border-glass); margin-top: 6px;
+}
+.mobile-picker-row {
+  display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+}
+.mobile-picker-label {
+  font-size: 14px; font-weight: 600; color: var(--text-2); min-width: 90px;
+}
+.mobile-theme-dots {
+  display: flex; gap: 8px;
+}
+.mobile-lang-opts {
+  display: flex; gap: 6px; flex-wrap: wrap;
+}
+.mobile-lang-opts .lang-opt {
+  padding: 4px 10px; font-size: 12px; border-radius: 8px;
 }
 
 /* ═══════════════════════════════════════════════════════

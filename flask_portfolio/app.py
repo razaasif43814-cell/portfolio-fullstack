@@ -4,18 +4,25 @@
   Flask + MongoDB + JWT Auth + Socket.IO + REST API
 ═══════════════════════════════════════════════════════════
 """
-# ── Eventlet monkey-patch MUST be first (before all imports) ──
-import eventlet
-eventlet.monkey_patch()
+import os
+import sys
 
-from flask import Flask, render_template, request, jsonify
+# ── Eventlet monkey-patch (only on Python < 3.13 / production) ──
+try:
+    if sys.version_info < (3, 13):
+        import eventlet
+        eventlet.monkey_patch()
+except Exception:
+    pass
+
+from flask import Flask, render_template, request, jsonify, redirect, url_for
 from flask_socketio import SocketIO
 from flask_cors import CORS
 from config import Config
 from utils.error_handler import register_error_handlers
 from utils.email_helper import send_contact_email
 from middleware.validators import sanitize_input
-import os
+
 
 # ── Create Flask App ────────────────────────────────────
 app = Flask(__name__)
@@ -23,7 +30,9 @@ app.config.from_object(Config)
 
 # ── Extensions ──────────────────────────────────────────
 CORS(app, supports_credentials=True)
-socketio = SocketIO(app, cors_allowed_origins="*", async_mode='eventlet')
+# Use eventlet on production (Python < 3.13), threading locally
+_async_mode = 'eventlet' if sys.version_info < (3, 13) else 'threading'
+socketio = SocketIO(app, cors_allowed_origins="*", async_mode=_async_mode)
 
 # ── Ensure upload directory exists ──────────────────────
 os.makedirs(Config.UPLOAD_FOLDER, exist_ok=True)
@@ -214,36 +223,46 @@ PROJECTS = [
 #  MAIN ROUTES
 # ══════════════════════════════════════════════════════════
 
-@app.route("/")
-def index():
-    """Portfolio homepage — serves data from DB or fallback."""
-    # Try to load from MongoDB, fallback to hardcoded data
+def _get_portfolio_data():
+    """Helper to load skills+projects from DB or fallback."""
     try:
         from models import skills_collection, projects_collection
         db_skills = list(skills_collection.find().sort('order', 1))
         db_projects = list(projects_collection.find().sort('order', 1))
-
-        skills_data = [{
-            'title': s.get('title', ''),
-            'skills': s.get('skills', [])
-        } for s in db_skills] if db_skills else SKILLS
-
+        skills_data = [{'title': s.get('title', ''), 'skills': s.get('skills', [])}
+                       for s in db_skills] if db_skills else SKILLS
         projects_data = [{
-            'id': i,
-            'title': p.get('title', ''),
-            'date': p.get('date', ''),
-            'description': p.get('description', ''),
-            'image': p.get('image', ''),
-            'tags': p.get('tags', []),
-            'category': p.get('category', ''),
-            'github': p.get('github', ''),
-            'webapp': p.get('webapp', ''),
+            'id': i, 'title': p.get('title', ''), 'date': p.get('date', ''),
+            'description': p.get('description', ''), 'image': p.get('image', ''),
+            'tags': p.get('tags', []), 'category': p.get('category', ''),
+            'github': p.get('github', ''), 'webapp': p.get('webapp', ''),
             'case_study': p.get('case_study', {}),
         } for i, p in enumerate(db_projects)] if db_projects else PROJECTS
     except Exception:
         skills_data = SKILLS
         projects_data = PROJECTS
+    return skills_data, projects_data
 
+
+@app.route("/")
+def index():
+    """Root — redirect to login if not authenticated, else portfolio."""
+    from utils.jwt_helper import decode_token
+    token = request.cookies.get('access_token') or \
+            request.headers.get('Authorization', '').replace('Bearer ', '')
+    if token:
+        payload, error = decode_token(token)
+        if not error:
+            # Logged in — go straight to portfolio
+            return redirect(url_for('portfolio'))
+    # Not logged in — go to login
+    return redirect(url_for('auth.login_page'))
+
+
+@app.route("/portfolio")
+def portfolio():
+    """Portfolio homepage — the main page after login."""
+    skills_data, projects_data = _get_portfolio_data()
     return render_template("index.html", bio=BIO, skills=skills_data,
                            experiences=EXPERIENCES, education=EDUCATION, projects=projects_data)
 

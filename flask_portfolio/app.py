@@ -4,6 +4,10 @@
   Flask + MongoDB + JWT Auth + Socket.IO + REST API
 ═══════════════════════════════════════════════════════════
 """
+# ── Eventlet monkey-patch MUST be first (before all imports) ──
+import eventlet
+eventlet.monkey_patch()
+
 from flask import Flask, render_template, request, jsonify
 from flask_socketio import SocketIO
 from flask_cors import CORS
@@ -19,7 +23,7 @@ app.config.from_object(Config)
 
 # ── Extensions ──────────────────────────────────────────
 CORS(app, supports_credentials=True)
-socketio = SocketIO(app, cors_allowed_origins="*", async_mode='threading')
+socketio = SocketIO(app, cors_allowed_origins="*", async_mode='eventlet')
 
 # ── Ensure upload directory exists ──────────────────────
 os.makedirs(Config.UPLOAD_FOLDER, exist_ok=True)

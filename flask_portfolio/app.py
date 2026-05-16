@@ -174,7 +174,7 @@ PROJECTS = [
         "tags": ["HTML", "CSS", "JavaScript", "DBMS", "Python"],
         "category": "web app",
         "github": "https://github.com/razaasif43814-cell/Smart-education-tool",
-        "webapp": "https://github.com/razaasif43814-cell/Smart-education-tool",
+        "webapp": "https://smart-education-tool.onrender.com",
         "case_study": {
             "problem": "Students needed a centralized platform to track assignments, monitor progress, and view leaderboards. Traditional methods were scattered and inefficient.",
             "features": ["Login System", "Assignment Tracking", "Progress Dashboard", "Leaderboard", "Teacher Panel", "Analytics"],

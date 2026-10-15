@@ -139,8 +139,8 @@ flask_portfolio/
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/razaasif43814-cell/3d-portfolio-website.git
-cd 3d-portfolio-website/flask_portfolio
+git clone https://github.com/razaasif43814-cell/portfolio-fullstack.git
+cd portfolio-fullstack/flask_portfolio
 
 # 2. Create virtual environment
 python -m venv venv
